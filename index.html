@@ -328,15 +328,10 @@
 </head>
 <body>
 
-  <div class="page-header">
-    <span class="badge">A2 · Unidad 4</span>
-    <h1 class="page-title">La cultura en el trabajo</h1>
-  </div>
 
-  <!-- ══════════ ACTIVIDAD 1 ══════════ -->
   <div class="activity">
     <div class="activity-header">
-      <span class="activity-num">1.</span>
+      
       <span class="activity-title">¿De qué temas hablan?</span>
     </div>
     <div class="activity-body">
@@ -394,59 +389,9 @@
     </div>
   </div>
 
-  <!-- ══════════ ACTIVIDAD 2 ══════════ -->
-  <div class="activity">
-    <div class="activity-header">
-      <span class="activity-num">2.</span>
-      <span class="activity-title">Completá el cuadro</span>
-    </div>
-    <div class="activity-body">
-      <p class="instructions">Escuchá la conversación de Clara Andueza y Ernesto Rúa y marcá sus respuestas.</p>
-
-      <div class="personas-intro">
-        <div class="persona-card">
-          <div class="persona-avatar">C</div>
-          <div>
-            <div class="persona-name">Clara Andueza</div>
-            <div class="persona-role">Directora de Créditos · Banco</div>
-          </div>
-        </div>
-        <div class="persona-card">
-          <div class="persona-avatar">E</div>
-          <div>
-            <div class="persona-name">Ernesto Rúa</div>
-            <div class="persona-role">Grafista · Empresa de publicidad</div>
-          </div>
-        </div>
-      </div>
-
-      <table class="act2-table" id="act2-table">
-        <thead>
-          <tr>
-            <th class="left" rowspan="2" style="width:34%">En la empresa de…</th>
-            <th colspan="3" style="border-bottom:1px solid #555">Clara Andueza</th>
-            <th colspan="3" style="border-bottom:1px solid #555">Ernesto Rúa</th>
-          </tr>
-          <tr>
-            <th>Sí</th><th>No</th><th>Depende</th>
-            <th>Sí</th><th>No</th><th>Depende</th>
-          </tr>
-        </thead>
-        <tbody id="act2-body">
-        </tbody>
-      </table>
-
-      <div class="btn-row">
-        <button class="btn btn-secondary" onclick="resetAct2()">Reiniciar</button>
-        <button class="btn btn-primary" onclick="checkAct2()">Comprobar</button>
-      </div>
-
-      <div class="feedback" id="fb2"></div>
-    </div>
-  </div>
-
+  
 <script>
-  // ── Activity 1 ──
+
   const CORRECT_TOPICS = new Set([
     'formalidad_trato',
     'flexibilidad_horarios',
@@ -519,98 +464,7 @@
     fb.className = 'feedback';
   }
 
-  // ── Activity 2 ──
-  const questions = [
-    { id: 'q1', text: '1- ¿Se viste de manera formal?',            clara: 'Depende', ernesto: 'No' },
-    { id: 'q2', text: '2- ¿Es posible emplear más de una hora para comer?', clara: 'No',      ernesto: 'Sí' },
-    { id: 'q3', text: '3- ¿La gente se llama por el apellido?',    clara: 'Depende', ernesto: 'No' },
-    { id: 'q4', text: '4- ¿Se tutea todo el mundo?',               clara: 'No',      ernesto: 'Sí' },
-    { id: 'q5', text: '5- ¿Se hacen regalos en alguna ocasión?',   clara: 'Depende', ernesto: 'Sí' },
-    { id: 'q6', text: '6- ¿Es muy importante la puntualidad?',     clara: 'Sí',      ernesto: 'Depende' },
-  ];
-
-  const options = ['Sí','No','Depende'];
-
-  function buildTable() {
-    const tbody = document.getElementById('act2-body');
-    tbody.innerHTML = '';
-    questions.forEach(q => {
-      const tr = document.createElement('tr');
-      let cells = `<td class="question-cell">${q.text}</td>`;
-      ['clara','ernesto'].forEach(p => {
-        options.forEach(opt => {
-          const name = `${q.id}_${p}`;
-          const id   = `${q.id}_${p}_${opt}`;
-          cells += `<td id="cell_${q.id}_${p}_${opt}">
-            <div class="radio-group">
-              <div class="radio-opt">
-                <input type="radio" name="${name}" id="${id}" value="${opt}"/>
-                <label for="${id}" title="${opt}">${opt[0]}</label>
-              </div>
-            </div>
-          </td>`;
-        });
-      });
-      tr.innerHTML = cells;
-      tbody.appendChild(tr);
-    });
-  }
-
-  buildTable();
-
-  function checkAct2() {
-    let total = 0, correct = 0;
-    // clear previous coloring
-    document.querySelectorAll('#act2-body td').forEach(td => {
-      td.classList.remove('cell-correct','cell-wrong');
-    });
-
-    questions.forEach(q => {
-      ['clara','ernesto'].forEach(p => {
-        const name = `${q.id}_${p}`;
-        const chosen = document.querySelector(`input[name="${name}"]:checked`);
-        const answer = p === 'clara' ? q.clara : q.ernesto;
-        total++;
-        if (chosen) {
-          const cellId = `cell_${q.id}_${p}_${chosen.value}`;
-          const cell = document.getElementById(cellId);
-          if (chosen.value === answer) {
-            correct++;
-            if (cell) cell.classList.add('cell-correct');
-          } else {
-            if (cell) cell.classList.add('cell-wrong');
-          }
-        }
-      });
-    });
-
-    const fb = document.getElementById('fb2');
-    fb.style.display = 'block';
-
-    if (correct === total) {
-      fb.className = 'feedback correct';
-      fb.innerHTML = `<div class="feedback-title">✓ ¡Excelente! Todas las respuestas son correctas.</div>
-        <div class="feedback-detail">Prestaste mucha atención a los detalles de cada empresa. ¡Muy bien!</div>`;
-    } else if (correct >= total * 0.6) {
-      fb.className = 'feedback partial';
-      fb.innerHTML = `<div class="feedback-title">◑ Bien, pero podés mejorar — ${correct} de ${total} correctas.</div>
-        <div class="feedback-detail">Las celdas en rojo tienen una respuesta incorrecta. Revisá y volvé a intentarlo.</div>`;
-    } else {
-      fb.className = 'feedback incorrect';
-      fb.innerHTML = `<div class="feedback-title">✗ ${correct} de ${total} correctas.</div>
-        <div class="feedback-detail">Escuchá el audio otra vez con atención. Las celdas en rojo necesitan revisión.</div>`;
-    }
-  }
-
-  function resetAct2() {
-    document.querySelectorAll('#act2-body input[type="radio"]').forEach(r => r.checked = false);
-    document.querySelectorAll('#act2-body td').forEach(td => {
-      td.classList.remove('cell-correct','cell-wrong');
-    });
-    const fb = document.getElementById('fb2');
-    fb.style.display = 'none';
-    fb.className = 'feedback';
-  }
+  
 </script>
 </body>
 </html>
