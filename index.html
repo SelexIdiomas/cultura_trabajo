@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>La cultura en el trabajo – Español A2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #febd59;
+      --gold-light: #fff3d6;
+      --gold-dim: rgba(254,189,89,0.18);
+      --bg: #f0f0ee;
+      --surface: #ffffff;
+      --border: #ddd;
+      --text: #2e2e2e;
+      --muted: #777;
+      --correct: #4caf50;
+      --correct-bg: #f0faf0;
+      --incorrect: #e05252;
+      --incorrect-bg: #fff3f3;
+      --radius: 10px;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.6;
+      padding: 32px 16px 64px;
+    }
+
+    .page-header {
+      max-width: 760px;
+      margin: 0 auto 36px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .badge {
+      background: var(--gold);
+      color: #3d2800;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: .07em;
+      padding: 4px 12px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .page-title {
+      font-family: 'Bad Script', cursive;
+      font-size: 28px;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    /* ── ACTIVITY CARD ── */
+    .activity {
+      max-width: 760px;
+      margin: 0 auto 32px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .activity-header {
+      background: var(--text);
+      padding: 16px 24px;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .activity-num {
+      font-family: 'Bad Script', cursive;
+      font-size: 22px;
+      color: var(--gold);
+    }
+
+    .activity-title {
+      font-family: 'Bad Script', cursive;
+      font-size: 19px;
+      color: #fff;
+      font-weight: 400;
+    }
+
+    .activity-body {
+      padding: 28px 28px 24px;
+    }
+
+    .instructions {
+      font-size: 13.5px;
+      color: var(--muted);
+      margin-bottom: 22px;
+      padding-left: 2px;
+    }
+
+    /* ── ACTIVITY 1: checkbox grid ── */
+    .topics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    @media(max-width: 520px){ .topics-grid{ grid-template-columns: 1fr; } }
+
+    .topic-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 14px;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+      user-select: none;
+    }
+
+    .topic-item:hover { border-color: var(--gold); background: var(--gold-dim); }
+
+    .topic-item.selected {
+      border-color: var(--gold);
+      background: var(--gold-light);
+    }
+
+    .topic-item input[type="checkbox"] { display: none; }
+
+    .check-box {
+      width: 18px; height: 18px;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .15s, background .15s;
+    }
+
+    .topic-item.selected .check-box {
+      border-color: var(--gold);
+      background: var(--gold);
+    }
+
+    .check-box svg { display: none; }
+    .topic-item.selected .check-box svg { display: block; }
+
+    .topic-label { font-size: 14px; }
+
+    /* ── ACTIVITY 2: table ── */
+    .personas-intro {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .persona-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+    }
+
+    .persona-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Bad Script', cursive;
+      font-size: 18px;
+      color: #3d2800;
+      flex-shrink: 0;
+    }
+
+    .persona-name { font-size: 13px; font-weight: 600; line-height: 1.3; }
+    .persona-role { font-size: 11.5px; color: var(--muted); }
+
+    .act2-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      margin-bottom: 24px;
+    }
+
+    .act2-table th {
+      background: var(--text);
+      color: #fff;
+      padding: 9px 12px;
+      text-align: center;
+      font-weight: 500;
+      font-size: 12.5px;
+    }
+
+    .act2-table th.left { text-align: left; }
+
+    .act2-table tr:nth-child(even) td { background: var(--bg); }
+    .act2-table tr:nth-child(odd) td { background: #fff; }
+
+    .act2-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #eee;
+      vertical-align: middle;
+    }
+
+    .act2-table td.question-cell { font-size: 13.5px; }
+
+    .radio-group {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .radio-opt {
+      position: relative;
+    }
+
+    .radio-opt input[type="radio"] { display: none; }
+
+    .radio-opt label {
+      display: block;
+      width: 32px; height: 32px;
+      border: 1.5px solid #ccc;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .radio-opt input:checked + label {
+      border-color: var(--gold);
+      background: var(--gold);
+      color: #3d2800;
+      font-weight: 600;
+    }
+
+    /* ── BUTTONS ── */
+    .btn-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .btn {
+      font-family: 'Poppins', sans-serif;
+      font-size: 13.5px;
+      font-weight: 500;
+      padding: 9px 22px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: opacity .15s, transform .1s;
+    }
+    .btn:active { transform: scale(.97); }
+
+    .btn-primary {
+      background: var(--gold);
+      color: #3d2800;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--muted);
+      border: 1.5px solid var(--border);
+    }
+
+    /* ── FEEDBACK ── */
+    .feedback {
+      margin-top: 20px;
+      border-radius: 8px;
+      padding: 16px 18px;
+      font-size: 13.5px;
+      display: none;
+    }
+
+    .feedback.correct {
+      background: var(--correct-bg);
+      border: 1.5px solid #a5d6a7;
+      color: #2e7d32;
+    }
+
+    .feedback.partial {
+      background: var(--gold-light);
+      border: 1.5px solid var(--gold);
+      color: #6b4800;
+    }
+
+    .feedback.incorrect {
+      background: var(--incorrect-bg);
+      border: 1.5px solid #ffcdd2;
+      color: #c62828;
+    }
+
+    .feedback-title {
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .feedback-detail {
+      margin-top: 8px;
+      font-size: 13px;
+    }
+
+    /* table cell feedback coloring */
+    td.cell-correct { background: #e8f5e9 !important; }
+    td.cell-wrong   { background: #ffebee !important; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 22px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-header">
+    <span class="badge">A2 · Unidad 4</span>
+    <h1 class="page-title">La cultura en el trabajo</h1>
+  </div>
+
+  <!-- ══════════ ACTIVIDAD 1 ══════════ -->
+  <div class="activity">
+    <div class="activity-header">
+      <span class="activity-num">1.</span>
+      <span class="activity-title">¿De qué temas hablan?</span>
+    </div>
+    <div class="activity-body">
+      <p class="instructions">Vas a escuchar una conversación sobre el ambiente en el trabajo. Seleccioná los temas que se mencionan.</p>
+
+      <div class="topics-grid" id="topics-grid">
+        <div class="topic-item" data-value="formalidad_trato">
+          <span class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#3d2800" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="topic-label">La formalidad en el trato</span>
+        </div>
+        <div class="topic-item" data-value="trabajo_equipo">
+          <span class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#3d2800" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="topic-label">El trabajo en equipo</span>
+        </div>
+        <div class="topic-item" data-value="flexibilidad_horarios">
+          <span class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#3d2800" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="topic-label">La flexibilidad de horarios</span>
+        </div>
+        <div class="topic-item" data-value="formalidad_vestir">
+          <span class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#3d2800" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="topic-label">La formalidad en la manera de vestir</span>
+        </div>
+        <div class="topic-item" data-value="jerarquias">
+          <span class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#3d2800" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="topic-label">Las jerarquías</span>
+        </div>
+        <div class="topic-item" data-value="comidas">
+          <span class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#3d2800" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="topic-label">Las comidas</span>
+        </div>
+        <div class="topic-item" data-value="sueldos">
+          <span class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#3d2800" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="topic-label">Los sueldos</span>
+        </div>
+        <div class="topic-item" data-value="vacaciones">
+          <span class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#3d2800" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="topic-label">Las vacaciones</span>
+        </div>
+        <div class="topic-item" data-value="celebraciones">
+          <span class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#3d2800" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="topic-label">Las celebraciones</span>
+        </div>
+        <div class="topic-item" data-value="formacion">
+          <span class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#3d2800" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="topic-label">La formación de los empleados</span>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="resetAct1()">Reiniciar</button>
+        <button class="btn btn-primary" onclick="checkAct1()">Comprobar</button>
+      </div>
+
+      <div class="feedback" id="fb1"></div>
+    </div>
+  </div>
+
+  <!-- ══════════ ACTIVIDAD 2 ══════════ -->
+  <div class="activity">
+    <div class="activity-header">
+      <span class="activity-num">2.</span>
+      <span class="activity-title">Completá el cuadro</span>
+    </div>
+    <div class="activity-body">
+      <p class="instructions">Escuchá la conversación de Clara Andueza y Ernesto Rúa y marcá sus respuestas.</p>
+
+      <div class="personas-intro">
+        <div class="persona-card">
+          <div class="persona-avatar">C</div>
+          <div>
+            <div class="persona-name">Clara Andueza</div>
+            <div class="persona-role">Directora de Créditos · Banco</div>
+          </div>
+        </div>
+        <div class="persona-card">
+          <div class="persona-avatar">E</div>
+          <div>
+            <div class="persona-name">Ernesto Rúa</div>
+            <div class="persona-role">Grafista · Empresa de publicidad</div>
+          </div>
+        </div>
+      </div>
+
+      <table class="act2-table" id="act2-table">
+        <thead>
+          <tr>
+            <th class="left" rowspan="2" style="width:34%">En la empresa de…</th>
+            <th colspan="3" style="border-bottom:1px solid #555">Clara Andueza</th>
+            <th colspan="3" style="border-bottom:1px solid #555">Ernesto Rúa</th>
+          </tr>
+          <tr>
+            <th>Sí</th><th>No</th><th>Depende</th>
+            <th>Sí</th><th>No</th><th>Depende</th>
+          </tr>
+        </thead>
+        <tbody id="act2-body">
+        </tbody>
+      </table>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="resetAct2()">Reiniciar</button>
+        <button class="btn btn-primary" onclick="checkAct2()">Comprobar</button>
+      </div>
+
+      <div class="feedback" id="fb2"></div>
+    </div>
+  </div>
+
+<script>
+  // ── Activity 1 ──
+  const CORRECT_TOPICS = new Set([
+    'formalidad_trato',
+    'flexibilidad_horarios',
+    'formalidad_vestir',
+    'comidas',
+    'celebraciones'
+  ]);
+
+  document.querySelectorAll('.topic-item').forEach(item => {
+    item.addEventListener('click', () => {
+      item.classList.toggle('selected');
+    });
+  });
+
+  function checkAct1() {
+    const selected = new Set(
+      [...document.querySelectorAll('.topic-item.selected')]
+        .map(el => el.dataset.value)
+    );
+
+    const correct = [...CORRECT_TOPICS].filter(v => selected.has(v));
+    const wrong   = [...selected].filter(v => !CORRECT_TOPICS.has(v));
+    const missed  = [...CORRECT_TOPICS].filter(v => !selected.has(v));
+
+    const fb = document.getElementById('fb1');
+    fb.style.display = 'block';
+
+    if (wrong.length === 0 && missed.length === 0) {
+      fb.className = 'feedback correct';
+      fb.innerHTML = `<div class="feedback-title">✓ ¡Perfecto!</div>
+        <div class="feedback-detail">Identificaste los cinco temas correctamente: <em>la formalidad en el trato, la flexibilidad de horarios, la formalidad en la manera de vestir, las comidas</em> y <em>las celebraciones</em>.</div>`;
+    } else if (correct.length > 0) {
+      fb.className = 'feedback partial';
+      const missedNames = missed.map(v => labelOf(v)).join(', ');
+      const wrongNames  = wrong.map(v => labelOf(v)).join(', ');
+      let detail = `<div class="feedback-detail">`;
+      if (missed.length) detail += `Faltaron: <strong>${missedNames}</strong>. `;
+      if (wrong.length)  detail += `No se mencionan: <strong>${wrongNames}</strong>.`;
+      detail += `</div>`;
+      fb.innerHTML = `<div class="feedback-title">◑ Casi…</div>${detail}`;
+    } else {
+      fb.className = 'feedback incorrect';
+      fb.innerHTML = `<div class="feedback-title">✗ Intentá de nuevo</div>
+        <div class="feedback-detail">Ninguna selección es correcta. Escuchá el audio con atención y buscá los temas relacionados con el ambiente laboral.</div>`;
+    }
+  }
+
+  function labelOf(val) {
+    const map = {
+      formalidad_trato: 'la formalidad en el trato',
+      flexibilidad_horarios: 'la flexibilidad de horarios',
+      formalidad_vestir: 'la formalidad en la manera de vestir',
+      comidas: 'las comidas',
+      celebraciones: 'las celebraciones',
+      trabajo_equipo: 'el trabajo en equipo',
+      jerarquias: 'las jerarquías',
+      sueldos: 'los sueldos',
+      vacaciones: 'las vacaciones',
+      formacion: 'la formación de los empleados'
+    };
+    return map[val] || val;
+  }
+
+  function resetAct1() {
+    document.querySelectorAll('.topic-item').forEach(el => {
+      el.classList.remove('selected');
+    });
+    const fb = document.getElementById('fb1');
+    fb.style.display = 'none';
+    fb.className = 'feedback';
+  }
+
+  // ── Activity 2 ──
+  const questions = [
+    { id: 'q1', text: '1- ¿Se viste de manera formal?',            clara: 'Depende', ernesto: 'No' },
+    { id: 'q2', text: '2- ¿Es posible emplear más de una hora para comer?', clara: 'No',      ernesto: 'Sí' },
+    { id: 'q3', text: '3- ¿La gente se llama por el apellido?',    clara: 'Depende', ernesto: 'No' },
+    { id: 'q4', text: '4- ¿Se tutea todo el mundo?',               clara: 'No',      ernesto: 'Sí' },
+    { id: 'q5', text: '5- ¿Se hacen regalos en alguna ocasión?',   clara: 'Depende', ernesto: 'Sí' },
+    { id: 'q6', text: '6- ¿Es muy importante la puntualidad?',     clara: 'Sí',      ernesto: 'Depende' },
+  ];
+
+  const options = ['Sí','No','Depende'];
+
+  function buildTable() {
+    const tbody = document.getElementById('act2-body');
+    tbody.innerHTML = '';
+    questions.forEach(q => {
+      const tr = document.createElement('tr');
+      let cells = `<td class="question-cell">${q.text}</td>`;
+      ['clara','ernesto'].forEach(p => {
+        options.forEach(opt => {
+          const name = `${q.id}_${p}`;
+          const id   = `${q.id}_${p}_${opt}`;
+          cells += `<td id="cell_${q.id}_${p}_${opt}">
+            <div class="radio-group">
+              <div class="radio-opt">
+                <input type="radio" name="${name}" id="${id}" value="${opt}"/>
+                <label for="${id}" title="${opt}">${opt[0]}</label>
+              </div>
+            </div>
+          </td>`;
+        });
+      });
+      tr.innerHTML = cells;
+      tbody.appendChild(tr);
+    });
+  }
+
+  buildTable();
+
+  function checkAct2() {
+    let total = 0, correct = 0;
+    // clear previous coloring
+    document.querySelectorAll('#act2-body td').forEach(td => {
+      td.classList.remove('cell-correct','cell-wrong');
+    });
+
+    questions.forEach(q => {
+      ['clara','ernesto'].forEach(p => {
+        const name = `${q.id}_${p}`;
+        const chosen = document.querySelector(`input[name="${name}"]:checked`);
+        const answer = p === 'clara' ? q.clara : q.ernesto;
+        total++;
+        if (chosen) {
+          const cellId = `cell_${q.id}_${p}_${chosen.value}`;
+          const cell = document.getElementById(cellId);
+          if (chosen.value === answer) {
+            correct++;
+            if (cell) cell.classList.add('cell-correct');
+          } else {
+            if (cell) cell.classList.add('cell-wrong');
+          }
+        }
+      });
+    });
+
+    const fb = document.getElementById('fb2');
+    fb.style.display = 'block';
+
+    if (correct === total) {
+      fb.className = 'feedback correct';
+      fb.innerHTML = `<div class="feedback-title">✓ ¡Excelente! Todas las respuestas son correctas.</div>
+        <div class="feedback-detail">Prestaste mucha atención a los detalles de cada empresa. ¡Muy bien!</div>`;
+    } else if (correct >= total * 0.6) {
+      fb.className = 'feedback partial';
+      fb.innerHTML = `<div class="feedback-title">◑ Bien, pero podés mejorar — ${correct} de ${total} correctas.</div>
+        <div class="feedback-detail">Las celdas en rojo tienen una respuesta incorrecta. Revisá y volvé a intentarlo.</div>`;
+    } else {
+      fb.className = 'feedback incorrect';
+      fb.innerHTML = `<div class="feedback-title">✗ ${correct} de ${total} correctas.</div>
+        <div class="feedback-detail">Escuchá el audio otra vez con atención. Las celdas en rojo necesitan revisión.</div>`;
+    }
+  }
+
+  function resetAct2() {
+    document.querySelectorAll('#act2-body input[type="radio"]').forEach(r => r.checked = false);
+    document.querySelectorAll('#act2-body td').forEach(td => {
+      td.classList.remove('cell-correct','cell-wrong');
+    });
+    const fb = document.getElementById('fb2');
+    fb.style.display = 'none';
+    fb.className = 'feedback';
+  }
+</script>
+</body>
+</html>
